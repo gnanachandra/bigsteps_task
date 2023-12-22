@@ -1,9 +1,16 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import NotFound from "./pages/NotFound";
+import Home from "./pages/Home";
+import Pokemon from "./pages/Pokemon";
 const App = () => {
   return (
-    <div className="w-screen h-screen text-lg lg:text-2xl font-medium flex items-center justify-center flex-col gap-4">
-      <p>BigSteps Task by V.Gnana Chandra</p>
-      <p>Redux Toolkit setup done</p>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/pokemon/:id" element={<Pokemon />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
   );
 };
 
