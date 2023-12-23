@@ -1,14 +1,62 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "../../api/axios";
+import toast from "react-hot-toast";
 
 const initialState = {
+  isLoading: true,
+  totalCount: 0,
   pokemons: [],
   pokemon: {},
 };
+
+export const getPokemonData = createAsyncThunk(
+  "/pokemon(get)",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        "https://pokeapi.co/api/v2/pokemon?limit=50"
+      );
+      const { results, count } = response.data;
+
+      const pokemonDetails = await Promise.all(
+        results.map(async (pokemon) => {
+          const pokemonResponse = await axios.get(pokemon.url);
+          return pokemonResponse.data;
+        })
+      );
+
+      return { pokemonDetails, count };
+    } catch (error) {
+      if (!error?.response) {
+        throw error;
+      }
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 
 const pokemonSlice = createSlice({
   name: "pokemon",
   initialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getPokemonData.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getPokemonData.fulfilled, (state, { payload }) => {
+      console.log(payload)
+      state.isLoading = false;
+      state.totalCount = payload.count;
+      state.pokemons = payload.pokemonDetails;
+      toast.success("pokemon data fetched successfully");
+    });
+    builder.addCase(getPokemonData.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.errorMessage = payload.message;
+      toast.error(payload.message || "Something went wrong");
+    });
+  },
 });
 
 export default pokemonSlice.reducer;

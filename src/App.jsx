@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import Pokemon from "./pages/Pokemon";
@@ -10,6 +11,7 @@ const App = () => {
         <Route path="/pokemon/:id" element={<Pokemon />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Toaster position="top-right" />
     </Router>
   );
 };
