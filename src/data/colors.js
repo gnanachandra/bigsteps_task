@@ -21,4 +21,15 @@ const backgroundColors = {
   normal: "#80deea",
   fairy: "#f8bbd0",
 };
-export { chipColors, backgroundColors };
+
+const progressBarColors = [
+  "blue",
+  "red",
+  "green",
+  "amber",
+  "teal",
+  "indigo",
+  "purple",
+  "pink",
+];
+export { chipColors, backgroundColors, progressBarColors };

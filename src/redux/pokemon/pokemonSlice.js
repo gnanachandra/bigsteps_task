@@ -18,9 +18,8 @@ export const getPokemonData = createAsyncThunk(
     const state = getState();
     console.log(state.pokemon.presentCount)
     try {
-      console.log(`https://pokeapi.co/api/v2/pokemon?offset=${state.pokemon.presentCount}&limit=${50}`)
       const response = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon?offset=${state.pokemon.presentCount}&limit=${50}`
+        `https://pokeapi.co/api/v2/pokemon?limit=${payload.limit}&offset=${state.pokemon.presentCount}`
       );
       const { results, count } = response.data;
       console.log("Results : ",results);
@@ -54,9 +53,10 @@ const pokemonSlice = createSlice({
       console.log(payload)
       state.isLoading = false;
       state.totalCount = payload.count;
-      state.pokemons = [...state.pokemons, ...payload.pokemonDetails];
+      state.pokemons = state.pokemons.concat(payload.pokemonDetails);
       state.presentCount = state.pokemons.length;
-      successToast(state.presentCount)
+      console.log("Present pokemons:",state.pokemons)
+      // successToast(state.presentCount)
     });
     builder.addCase(getPokemonData.rejected, (state, { payload }) => {
       console.log(payload)

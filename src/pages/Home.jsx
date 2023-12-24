@@ -7,14 +7,18 @@ import { Input, Option, Select } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { getPokemonTypes } from "../utils/getPokemonTypes";
 import { filterPokemonData } from "../utils/filter";
+import PokemonDetail from "../components/PokemonDetail";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { pokemons,presentCount } = useSelector((store) => store["pokemon"]);
+  const { pokemons, presentCount } = useSelector((store) => store["pokemon"]);
+
+  
   const [filteredPokemonData, setFilteredPokemonData] = useState([]);
   const [pokemonTypes, setPokemonTypes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dropDownvalue, setDropDownValue] = useState("all");
+
   useEffect(() => {
     dispatch(getPokemonData({ limit: 50, offset: 0 }));
   }, [dispatch]);
@@ -24,13 +28,22 @@ const Home = () => {
     setPokemonTypes(getPokemonTypes(pokemons));
   }, [pokemons]);
 
+  useEffect(() => {
+    // Update filtered data when 'pokemons' changes
+    const newFilteredData = filterPokemonData(
+      searchTerm,
+      dropDownvalue,
+      pokemons
+    );
+    setFilteredPokemonData(newFilteredData);
+  }, [pokemons, searchTerm, dropDownvalue]);
 
   const handleFilter = () => {
     const filteredData = filterPokemonData(searchTerm, dropDownvalue, pokemons);
-    console.log("Filtered Data : ",filteredData)
+    console.log("Filtered Data : ", filteredData);
     setFilteredPokemonData(filteredData);
   };
-
+  
   return (
     <div className="max-w-7xl mx-auto mb-5">
       {/* search and filter */}
@@ -45,7 +58,7 @@ const Home = () => {
             }}
           />
         </div>
-        
+
         <div className="w-72">
           <Select
             label="Select Type"
@@ -67,7 +80,7 @@ const Home = () => {
         </div>
       </div>
       {pokemons.length > 0 ? (
-        <Pokemons data={filterPokemonData(searchTerm,dropDownvalue,pokemons)} />
+        <Pokemons data={filteredPokemonData} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 items-center justify-center mx-auto w-full h-full">
           {Array.from({ length: 12 }, (_, index) => (
@@ -75,6 +88,7 @@ const Home = () => {
           ))}
         </div>
       )}
+      
     </div>
   );
 };

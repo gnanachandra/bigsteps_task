@@ -1,11 +1,20 @@
 import { Card, CardBody, CardHeader, Chip } from "@material-tailwind/react";
 import { backgroundColors, chipColors } from "../data/colors";
+import PokemonDetail from "./PokemonDetail";
+import { useState } from "react";
 /* eslint-disable react/prop-types */
 const PokemonCard = ({ pokemon }) => {
+  const [pokemonData, setPokemonData] = useState({});
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+
   return (
     <Card
-      className="rounded-md mx-auto  w-[300px] lg:w-full h-full shadow-sm border border-gray-300 hover:shadow-md cursor-pointer"
+      className="rounded-md mx-auto  w-[300px] lg:w-full h-full shadow-sm border flex flex-col justify-between border-gray-300 hover:shadow-md cursor-pointer"
       style={{ backgroundColor: backgroundColors[pokemon.types[0].type.name] }}
+      onClick={() => setPokemonData(pokemon)}
     >
       <CardHeader
         floated={false}
@@ -47,6 +56,11 @@ const PokemonCard = ({ pokemon }) => {
           </div>
         </div>
       </CardBody>
+      <PokemonDetail
+        open={open}
+        handleOpen={handleOpen}
+        pokemon={pokemonData}
+      />
     </Card>
   );
 };
