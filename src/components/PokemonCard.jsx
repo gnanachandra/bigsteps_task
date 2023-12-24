@@ -1,13 +1,16 @@
 import { Card, CardBody, CardHeader, Chip } from "@material-tailwind/react";
-
+import { backgroundColors, chipColors } from "../data/colors";
 /* eslint-disable react/prop-types */
 const PokemonCard = ({ pokemon, index }) => {
   return (
-    <Card className="rounded-md mx-auto  w-[300px] lg:w-full h-full shadow-sm border border-gray-300 hover:shadow-md hover:scale-105 transition-all duration-1000 cursor-pointer ease-in-out">
+    <Card
+      className="rounded-md mx-auto  w-[300px] lg:w-full h-full shadow-sm border border-gray-300 hover:shadow-md cursor-pointer"
+      style={{ backgroundColor: backgroundColors[pokemon.types[0].type.name] }}
+    >
       <CardHeader
         floated={false}
         shadow={false}
-        className="capitalize rounded-none"
+        className="capitalize rounded-none bg-transparent text-black font-medium"
       >
         {pokemon.name}
       </CardHeader>
@@ -18,10 +21,12 @@ const PokemonCard = ({ pokemon, index }) => {
             {pokemon.types.map((type, i) => {
               return (
                 <Chip
-                  color="purple"
                   value={type.type.name}
                   className="w-fit h-fit shadow-none"
                   key={i}
+                  style={{
+                    backgroundColor: chipColors[type.type.name] || "#212121",
+                  }}
                 />
               );
             })}
