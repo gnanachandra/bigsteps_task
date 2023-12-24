@@ -1,8 +1,42 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Pokedox
 
-Currently, two official plugins are available:
+A state-of-the-art Pokedex application that allows users to retrieve, search, and dissect different pokemon
+by their statistics.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Features
+
+- Implemented infinite scrolling
+- Filtering can be done with both search text and pokemon type
+- Implemented Real time filter without page refresh
+- A interactive model which displays the details of the pokemon
+- Responsive on all devices
+- utilized Redux Toolkit for efficient state management
+
+# Tech Stack
+
+- React.js
+- Tailwind css
+- Redux Toolkit
+- Material Tailwind
+# Live link [Live Website ✨](https://pokedex-gnanachandra.vercel.app/)
+
+# Installation and Usage
+
+- Clone the repository:
+
+   ```bash
+   git clone https://github.com/gnanachandra/bigsteps_task
+   ```
+
+- Install the dependencies
+
+    ```bash
+    npm install
+    ```
+
+- Run the application
+
+    ```bash
+    npm run dev
+    ```
