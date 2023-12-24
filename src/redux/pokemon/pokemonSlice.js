@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../../api/axios";
 import toast from "react-hot-toast";
+import { successToast } from "../../utils/toastHelper";
 
 const initialState = {
   isLoading: true,
@@ -14,7 +15,7 @@ export const getPokemonData = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        "https://pokeapi.co/api/v2/pokemon?limit=50"
+        `https://pokeapi.co/api/v2/pokemon?limit=${payload.limit}$offset=${payload.offset}`
       );
       const { results, count } = response.data;
 
@@ -48,13 +49,14 @@ const pokemonSlice = createSlice({
       console.log(payload)
       state.isLoading = false;
       state.totalCount = payload.count;
-      state.pokemons = payload.pokemonDetails;
-      toast.success("pokemon data fetched successfully");
+      state.pokemons = [...state.pokemons, ...payload.pokemonDetails];
+      // successToast("pokemon data fetched")
     });
     builder.addCase(getPokemonData.rejected, (state, { payload }) => {
+      console.log(payload)
       state.isLoading = false;
-      state.errorMessage = payload.message;
-      toast.error(payload.message || "Something went wrong");
+      state.errorMessage = payload?.message;
+      toast.error(payload?.message || "Something went wrong");
     });
   },
 });

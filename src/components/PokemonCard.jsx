@@ -29,9 +29,12 @@ const PokemonCard = ({ pokemon, index }) => {
           {/* Image */}
           <div>
             <img
-              src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${index}.svg`}
+              src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${
+                index + 1
+              }.svg`}
               alt={pokemon.name}
               className="h-50 w-20"
+              loading="lazy"
             />
           </div>
         </div>
