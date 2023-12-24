@@ -1,7 +1,7 @@
 import { Card, CardBody, CardHeader, Chip } from "@material-tailwind/react";
 import { backgroundColors, chipColors } from "../data/colors";
 /* eslint-disable react/prop-types */
-const PokemonCard = ({ pokemon, index }) => {
+const PokemonCard = ({ pokemon }) => {
   return (
     <Card
       className="rounded-md mx-auto  w-[300px] lg:w-full h-full shadow-sm border border-gray-300 hover:shadow-md cursor-pointer"
@@ -34,12 +34,15 @@ const PokemonCard = ({ pokemon, index }) => {
           {/* Image */}
           <div>
             <img
-              src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${
-                index + 1
-              }.svg`}
+              src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${pokemon.id}.svg`}
               alt={pokemon.name}
               className="h-50 w-20"
               loading="lazy"
+              onError={(e) => {
+                e.target.onerror = null; // Prevent infinite fallback loop
+                e.target.src =
+                  "https://storage.googleapis.com/filesharingapplication/pokeball.png"; // Replace with your default image URL
+              }}
             />
           </div>
         </div>

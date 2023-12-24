@@ -7,19 +7,23 @@ import { successToast } from "../../utils/toastHelper";
 const initialState = {
   isLoading: true,
   totalCount: 0,
+  presentCount : 0,
   pokemons: [],
   pokemon: {},
 };
 
 export const getPokemonData = createAsyncThunk(
   "/pokemon(get)",
-  async (payload, { rejectWithValue }) => {
+  async (payload, {getState,rejectWithValue}) => {
+    const state = getState();
+    console.log(state.pokemon.presentCount)
     try {
+      console.log(`https://pokeapi.co/api/v2/pokemon?offset=${state.pokemon.presentCount}&limit=${50}`)
       const response = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon?limit=${payload.limit}$offset=${payload.offset}`
+        `https://pokeapi.co/api/v2/pokemon?offset=${state.pokemon.presentCount}&limit=${50}`
       );
       const { results, count } = response.data;
-
+      console.log("Results : ",results);
       const pokemonDetails = await Promise.all(
         results.map(async (pokemon) => {
           const pokemonResponse = await axios.get(pokemon.url);
@@ -51,7 +55,8 @@ const pokemonSlice = createSlice({
       state.isLoading = false;
       state.totalCount = payload.count;
       state.pokemons = [...state.pokemons, ...payload.pokemonDetails];
-      // successToast("pokemon data fetched")
+      state.presentCount = state.pokemons.length;
+      successToast(state.presentCount)
     });
     builder.addCase(getPokemonData.rejected, (state, { payload }) => {
       console.log(payload)
