@@ -7,7 +7,7 @@ const PokemonCardSkeleton = () => {
         floated={false}
         shadow={false}
         className="capitalize w-14 h-3 bg-gray-300 rounded"
-      ></CardHeader>
+      >{""}</CardHeader>
 
       <CardBody>
         <div className="flex justify-between">

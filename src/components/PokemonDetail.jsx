@@ -22,7 +22,7 @@ const PokemonDetail = ({ open, handleOpen, pokemon }) => {
         View more
       </Button>
       <Dialog open={open} handler={handleOpen}>
-        <DialogHeader>{pokemon.name}</DialogHeader>
+        <DialogHeader>{pokemon?.name || ""}</DialogHeader>
         <DialogBody className="w-full flex flex-col lg:flex-row justify-between items-center">
           <div className="w-[30%] flex justify-center">
             <img

@@ -1,31 +1,29 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPokemonData } from "../redux/pokemon/pokemonSlice";
-import PokemonCardSkeleton from "../components/skeletons/PokemonCardSkeleton";
-import Pokemons from "../components/Pokemons";
+import { getPokemonData, getPokemonTypes } from "../redux/pokemon/pokemonSlice";
+
 import { Input, Option, Select } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { getPokemonTypes } from "../utils/getPokemonTypes";
+
 import { filterPokemonData } from "../utils/filter";
-import PokemonDetail from "../components/PokemonDetail";
+
+import Pokemons from "../components/Pokemons";
+import PokemonCardSkeleton from "../components/skeletons/PokemonCardSkeleton";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { pokemons, presentCount } = useSelector((store) => store["pokemon"]);
-
-  
+  const { pokemons, pokemonTypes } = useSelector((store) => store["pokemon"]);
   const [filteredPokemonData, setFilteredPokemonData] = useState([]);
-  const [pokemonTypes, setPokemonTypes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dropDownvalue, setDropDownValue] = useState("all");
 
   useEffect(() => {
     dispatch(getPokemonData({ limit: 50, offset: 0 }));
+    dispatch(getPokemonTypes());
   }, [dispatch]);
 
   useEffect(() => {
     setFilteredPokemonData(pokemons);
-    setPokemonTypes(getPokemonTypes(pokemons));
   }, [pokemons]);
 
   useEffect(() => {
@@ -40,15 +38,14 @@ const Home = () => {
 
   const handleFilter = () => {
     const filteredData = filterPokemonData(searchTerm, dropDownvalue, pokemons);
-    console.log("Filtered Data : ", filteredData);
     setFilteredPokemonData(filteredData);
   };
-  
+
   return (
     <div className="max-w-7xl mx-auto mb-5">
       {/* search and filter */}
       <div className="my-10 flex flex-col gap-5 md:flex-row md:justify-between">
-        <div className="w-72">
+        <div className="w-72 mx-auto">
           <Input
             label="Search"
             icon={<MagnifyingGlassIcon className="h-5 w-5" />}
@@ -59,7 +56,7 @@ const Home = () => {
           />
         </div>
 
-        <div className="w-72">
+        <div className="w-72 mx-auto">
           <Select
             label="Select Type"
             onChange={(e) => {
@@ -67,12 +64,15 @@ const Home = () => {
               handleFilter();
             }}
             defaultValue={"all"}
-            selected={"all"}
           >
             {pokemonTypes?.map((type) => {
               return (
-                <Option key={type} className="capitalize" value={type}>
-                  {type}
+                <Option
+                  key={type?.name}
+                  className="capitalize"
+                  value={type?.name}
+                >
+                  {type?.name}
                 </Option>
               );
             })}
@@ -88,7 +88,6 @@ const Home = () => {
           ))}
         </div>
       )}
-      
     </div>
   );
 };

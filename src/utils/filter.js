@@ -2,7 +2,7 @@
 const loadedIds = new Set();
 
 const filterPokemonData = (searchValue, dropDownValue, newData) => {
-  console.log("Received data Length : ",newData.length);
+  
   if (searchValue === "" && dropDownValue === "all") {
     return newData;
   }
@@ -22,7 +22,7 @@ const filterPokemonData = (searchValue, dropDownValue, newData) => {
       return item.types.some((i) => i.type.name === dropDownValue);
     });
   }
-  console.log("Before removing duplicates : ",filteredData)
+  
   // Filter out duplicates based on loadedIds
   filteredData = filteredData.filter((item) => {
     if (!loadedIds.has(item.name)) {
@@ -32,7 +32,7 @@ const filterPokemonData = (searchValue, dropDownValue, newData) => {
     return false;
   });
 
-  console.log("filtered dropdown : ",dropDownValue,"Data : ",filteredData)
+  
   
   return filteredData;
 };
