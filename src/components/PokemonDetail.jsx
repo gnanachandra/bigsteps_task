@@ -33,7 +33,7 @@ const PokemonDetail = ({ open, handleOpen, pokemon }) => {
               onError={(e) => {
                 e.target.onerror = null; // Prevent infinite fallback loop
                 e.target.src =
-                  "https://storage.googleapis.com/filesharingapplication/pokeball.png"; // Replace with your default image URL
+                  "/pokeball.png"
               }}
             />
           </div>

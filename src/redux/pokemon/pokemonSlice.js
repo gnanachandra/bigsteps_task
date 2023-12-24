@@ -7,22 +7,21 @@ import { successToast } from "../../utils/toastHelper";
 const initialState = {
   isLoading: true,
   totalCount: 0,
-  presentCount : 0,
+  presentCount: 0,
   pokemons: [],
   pokemon: {},
 };
 
 export const getPokemonData = createAsyncThunk(
   "/pokemon(get)",
-  async (payload, {getState,rejectWithValue}) => {
+  async (payload, { getState, rejectWithValue }) => {
     const state = getState();
-    console.log(state.pokemon.presentCount)
+    const nextRequest = state.pokemon.next;
+    console.log(nextRequest)
     try {
-      const response = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon?limit=${payload.limit}&offset=${state.pokemon.presentCount}`
-      );
-      const { results, count } = response.data;
-      console.log("Results : ",results);
+      const response = await axios.get(nextRequest);
+      const { results, count, next } = response.data;
+      console.log("Results : ", results);
       const pokemonDetails = await Promise.all(
         results.map(async (pokemon) => {
           const pokemonResponse = await axios.get(pokemon.url);
@@ -30,7 +29,7 @@ export const getPokemonData = createAsyncThunk(
         })
       );
 
-      return { pokemonDetails, count };
+      return { pokemonDetails, count, next };
     } catch (error) {
       if (!error?.response) {
         throw error;
@@ -39,7 +38,6 @@ export const getPokemonData = createAsyncThunk(
     }
   }
 );
-
 
 const pokemonSlice = createSlice({
   name: "pokemon",
@@ -50,16 +48,17 @@ const pokemonSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getPokemonData.fulfilled, (state, { payload }) => {
-      console.log(payload)
+      console.log(payload);
       state.isLoading = false;
       state.totalCount = payload.count;
       state.pokemons = state.pokemons.concat(payload.pokemonDetails);
       state.presentCount = state.pokemons.length;
-      console.log("Present pokemons:",state.pokemons)
-      // successToast(state.presentCount)
+      state.next = payload.next;
+      console.log("Present pokemons:", state.pokemons);
+      successToast(state.presentCount)
     });
     builder.addCase(getPokemonData.rejected, (state, { payload }) => {
-      console.log(payload)
+      console.log(payload);
       state.isLoading = false;
       state.errorMessage = payload?.message;
       toast.error(payload?.message || "Something went wrong");
