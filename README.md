@@ -40,3 +40,9 @@ by their statistics.
     ```bash
     npm run dev
     ```
+## Screenshots
+
+![App Screenshot](https://storage.googleapis.com/filesharingapplication/Screenshot%20(960).png)
+
+![App Screenshot](https://storage.googleapis.com/filesharingapplication/Screenshot%20(961).png)
+
